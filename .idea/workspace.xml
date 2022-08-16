@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0208226e-8c03-4fe6-8d19-fedec596da07" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.browserslistrc" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.vscode/extensions.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/.vscode/tasks.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/angular.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/karma.conf.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/app/app.component.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/app/app.component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/app/app.component.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/app/app.component.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/app/app.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/assets/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/environments/environment.prod.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/environments/environment.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/polyfills.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/src/test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/tsconfig.app.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Crypto_Frontend_Angular/tsconfig.spec.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Crypto_Frontend_Angular" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="true" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="true" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.haulmont.jpb.jpaInspector" value="false" />
+        <entry key="com.haulmont.jpb.jpaPalette" value="false" />
+        <entry key="com.haulmont.jpb.jpaStructure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectId" id="2DCpMvSFMLAATFmvP924RVmQ074" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
+  </component>
+  <component name="RunManager" selected="Application.CryptoApplication">
+    <configuration name="CryptoApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.Crypto.CryptoApplication" />
+      <module name="Crypto" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.Crypto.File.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileUpload" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.Crypto.File.FileUpload" />
+      <module name="Crypto" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.Crypto.File.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CryptoApplication" />
+        <item itemvalue="Application.FileUpload" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0208226e-8c03-4fe6-8d19-fedec596da07" name="Changes" comment="" />
+      <created>1660212886037</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1660212886037</updated>
+    </task>
+    <servers />
+  </component>
+</project>
