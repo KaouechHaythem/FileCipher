@@ -1,31 +1,39 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.service;
 
+import crypto.backend.springboot.file.model.File;
+import crypto.backend.springboot.file.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 /**
  * this class provides an implementation of the CRUD of FILE
  */
-public class FileService {
+public class FileCRUDService {
     @Autowired
     private final FileRepository fileRepository;
 
-    public FileService(FileRepository fileRepository) {
+    public FileCRUDService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
     }
+
 
     public List<File> getFiles() {
         return fileRepository.findAll();
     }
-
+    public Optional<File> getFile(String uuid){
+        UUID id = UUID.fromString(uuid);
+        return fileRepository.findById(id);
+    }
     /**
      * add a file to database
      * uuid is returned to be used in FileUploadService.addFile
+     *
      * @param fileName
      * @return
      */
@@ -39,6 +47,7 @@ public class FileService {
     /**
      * delete a file from database
      * the original  name of the file is returned in order to be used in UploadService.removeFile
+     *
      * @param uuidAsString
      * @return
      */
@@ -49,4 +58,6 @@ public class FileService {
         return targetFileName;
 
     }
+
+
 }

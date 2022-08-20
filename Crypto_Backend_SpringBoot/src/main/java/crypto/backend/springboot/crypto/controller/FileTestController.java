@@ -1,5 +1,6 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.crypto.controller;
 
+import crypto.backend.springboot.file.service.FileCryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,13 @@ import java.security.NoSuchAlgorithmException;
  * used to test the local upload
  */
 @RestController
-@RequestMapping(path = "file")
+@RequestMapping(path = "filecryptotest")
 
-public class FileController {
+public class FileTestController {
     public final FileCryptoService fileCryptoService;
 
     @Autowired
-    public FileController(FileCryptoService fileCryptoService) {
+    public FileTestController(FileCryptoService fileCryptoService) {
         this.fileCryptoService = fileCryptoService;
     }
 

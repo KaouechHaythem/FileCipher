@@ -1,8 +1,10 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.service;
 
+import crypto.backend.springboot.minIO.MinioInitializer;
 import io.minio.*;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,14 +19,20 @@ import java.security.NoSuchAlgorithmException;
 /**
  * A service class responsible for uploading files
  */
-public class FileUploadService {
-    private String minioEndPoint="http://127.0.0.1:9000";
-    private String minioUserName ="minioadmin";
-    private String minioPassword ="minioadmin";
+public class FileService {
+
     // the file in wich the files will be uploaded locally
-    private String uploadFolder = "C:/Users/ASUS/Desktop/Work/Advyteam/Crypto/uploads/id";
+    @Value("${file.upload.folder}")
+    private String uploadFolder;
+
+    @Value("${minio.bucket.name}")
+    private String bucketName;
     @Autowired
-    private FileService fileService;
+    private MinioInitializer minioInitializer;
+    @Autowired
+    private FileCRUDService fileCRUDService;
+
+    MinioClient minioClient = MinioInitializer.getMinioClient();
 
     /**
      * this metod uploads a file to the specified uploadFolder
@@ -39,15 +47,11 @@ public class FileUploadService {
 
     }
 
-    public void minIOUpload(MultipartFile file, String bucketName) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public void minIOUpload(MultipartFile file) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
 
             // Create a minioClient with the local MinIO server , its access key and secret key.
-            MinioClient minioClient =
-                    MinioClient.builder()
-                            .endpoint(minioEndPoint)
-                            .credentials(minioUserName, minioPassword)
-                            .build();
+
 
             // Make 'crypto' bucket if not exist.
             boolean found =
@@ -75,23 +79,18 @@ public class FileUploadService {
     /**
      * used to upload an encrypted file to aminio server and to the database
      * @param file
-     * @param bucketName
+
      * @throws IOException
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      */
-    public void minIODBUpload(MultipartFile file, String bucketName) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public void minIODBUpload(MultipartFile file) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
             // save the file before sending
             // savedName is the name in wich the file will be stored in minIO
             // it s the combination of its uuid in the database and its originalname
-            String savedName = fileService.addFile(file.getOriginalFilename()).toString() + file.getOriginalFilename();
+            String savedName = fileCRUDService.addFile(file.getOriginalFilename()).toString() + file.getOriginalFilename();
             // Create a minioClient with the local MinIO server , its access key and secret key.
-            MinioClient minioClient =
-                    MinioClient.builder()
-                            .endpoint(minioEndPoint)
-                            .credentials(minioUserName, minioPassword)
-                            .build();
 
             // Make 'crypto' bucket if not exist.
             boolean found =
@@ -119,7 +118,7 @@ public class FileUploadService {
     /**
      * used to delete a file from a minio bucket and from the database
      * @param uuid
-     * @param bucketName
+
      * @throws ServerException
      * @throws InsufficientDataException
      * @throws ErrorResponseException
@@ -130,14 +129,10 @@ public class FileUploadService {
      * @throws XmlParserException
      * @throws InternalException
      */
-    public void removeFile(String uuid,String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        MinioClient minioClient =
-                MinioClient.builder()
-                        .endpoint(minioEndPoint)
-                        .credentials(minioUserName, minioPassword)
-                        .build();
+    public void removeFile(String uuid) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+
         minioClient.removeObject(
-                RemoveObjectArgs.builder().bucket(bucketName).object(uuid+fileService.deleteFile(uuid)).build());
+                RemoveObjectArgs.builder().bucket(bucketName).object(uuid+ fileCRUDService.deleteFile(uuid)).build());
     }
     }
 

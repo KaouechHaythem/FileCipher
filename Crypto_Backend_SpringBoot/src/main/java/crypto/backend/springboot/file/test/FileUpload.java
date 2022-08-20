@@ -1,4 +1,4 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.test;
 
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;

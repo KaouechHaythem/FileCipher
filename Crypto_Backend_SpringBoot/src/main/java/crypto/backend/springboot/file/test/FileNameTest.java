@@ -1,4 +1,4 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.test;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

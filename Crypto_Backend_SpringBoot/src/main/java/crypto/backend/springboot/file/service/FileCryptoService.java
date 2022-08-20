@@ -1,6 +1,8 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.service;
 
 
+import crypto.backend.springboot.crypto.service.CryptoRSAService;
+import crypto.backend.springboot.file.repository.FileRepository;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;

@@ -1,5 +1,6 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.repository;
 
+import crypto.backend.springboot.file.model.File;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

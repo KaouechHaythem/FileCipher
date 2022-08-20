@@ -1,4 +1,4 @@
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;

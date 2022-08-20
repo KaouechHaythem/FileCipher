@@ -1,15 +1,15 @@
 
-package com.example.Crypto.File;
+package crypto.backend.springboot.file.controller;
 
 
+import crypto.backend.springboot.file.model.File;
+import crypto.backend.springboot.file.service.FileCRUDService;
+import crypto.backend.springboot.file.service.FileCryptoService;
+import crypto.backend.springboot.file.service.FileService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Text;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -18,19 +18,22 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A controller class responsible for uploading the files
  */
 @RestController
-@RequestMapping("upload")
-public class FileUploadController {
+@RequestMapping("api/v1/file")
+public class FileController {
     @Autowired
-    private FileUploadService fileUploadService;
+    private FileService fileService;
     @Autowired
     private FileCryptoService fileCryptoService;
     @Autowired
-    private FileService fileService;
+    private FileCRUDService fileCRUDService;
+
 
     /**
      * upload the files , locally , without encrypting them
@@ -38,9 +41,9 @@ public class FileUploadController {
      * @param multipartFile
      * @throws IOException
      */
-    @PostMapping(path = "normal")
+    @PostMapping(path = "normalupload")
     public void upload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        fileUploadService.upload(multipartFile);
+        fileService.upload(multipartFile);
 
     }
 
@@ -56,11 +59,11 @@ public class FileUploadController {
      * @throws BadPaddingException
      * @throws InvalidKeyException
      */
-    @PostMapping(path = "crypto")
+    @PostMapping(path = "cryptoupload")
     public void cryptoUpload(@RequestParam("file") MultipartFile multipartFile) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
 
         byte[] skey = new byte[128];
-        fileUploadService.upload(fileCryptoService.cryptUpload(multipartFile, skey));
+        fileService.upload(fileCryptoService.cryptUpload(multipartFile, skey));
     }
 
     /**
@@ -71,9 +74,9 @@ public class FileUploadController {
      * @throws NoSuchAlgorithmException
      * @throws InvalidKeyException
      */
-    @PostMapping(path = "minio")
+    @PostMapping(path = "minioupload")
     public void minIOUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
-        fileUploadService.minIOUpload(multipartFile, "normal");
+        fileService.minIOUpload(multipartFile);
 
     }
 
@@ -89,13 +92,13 @@ public class FileUploadController {
      * @throws BadPaddingException
      * @throws InvalidKeyException
      */
-    @PostMapping(path = "cryptominio")
+    @PostMapping(path = "cryptominioupload")
 
     public void cryptoMinioUpload(@RequestParam("file") MultipartFile multipartFile) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
 
         byte[] skey = new byte[128];
 
-        fileUploadService.minIOUpload(fileCryptoService.cryptUpload(multipartFile, skey), "crypto");
+        fileService.minIOUpload(fileCryptoService.cryptUpload(multipartFile, skey));
 
 
     }
@@ -112,18 +115,21 @@ public class FileUploadController {
      * @throws BadPaddingException
      * @throws InvalidKeyException
      */
-    @PostMapping(path = "cryptominiodb")
-    public void cryptoMinioDBUpload(@RequestParam("file") MultipartFile multipartFile) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+    @PostMapping(path = "miniodbupload/{crypto}")
+    public void cryptoMinioDBUpload(@RequestParam("file") MultipartFile multipartFile, @PathVariable("crypto") boolean crypto) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+        if (crypto) {
+            byte[] skey = new byte[128];
 
-        byte[] skey = new byte[128];
-
-        fileUploadService.minIODBUpload(fileCryptoService.cryptUpload(multipartFile, skey), "crypto");
-
+            fileService.minIODBUpload(fileCryptoService.cryptUpload(multipartFile, skey));
+        } else {
+            fileService.minIODBUpload(multipartFile);
+        }
 
     }
 
     /**
      * used to delete a file from minIO and From Database
+     *
      * @param uuid
      * @throws ServerException
      * @throws InsufficientDataException
@@ -135,8 +141,18 @@ public class FileUploadController {
      * @throws XmlParserException
      * @throws InternalException
      */
-    @PostMapping("deletefile")
-    public void removeFile(@RequestParam("uuid") String uuid) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-        fileUploadService.removeFile(uuid.toString(),"crypto");
+    @DeleteMapping("{uuid}")
+    public void removeFile(@PathVariable("uuid") String uuid) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+        fileService.removeFile(uuid.toString());
+    }
+
+    @GetMapping(path = "getall")
+    public List<File> getAll() {
+        return fileCRUDService.getFiles();
+    }
+
+    @GetMapping("{uuid}")
+    public Optional<File> getOne(@PathVariable("uuid") String uuid) {
+        return fileCRUDService.getFile(uuid);
     }
 }
