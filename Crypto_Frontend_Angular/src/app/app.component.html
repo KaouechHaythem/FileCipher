@@ -1,8 +1,34 @@
-<h1>Crypto</h1>
-<h2>available files :</h2>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+
+<h1 style="text-align:center;"> Crypto</h1>
 <div>{{getFiles()}}</div>
+<div class="container bootdey">
+    <div class="panel panel-default panel-order">
+        <div class="panel-heading">
+            <strong>files history</strong>
+         
+        </div>
 <div *ngFor="let file of files">
-<div>{{file.fileName}}</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-1" >user : {{file.user}}</div>
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-12">
+                           
+                            <span><strong>file name:  </strong></span> <span class="label label-info">{{file.fileName}}</span><br />
+                            <span><strong>file id:  </strong></span> <span class="label label-info">{{file.uuid+"  "}}</span><br />
+                            <a data-placement="top" class="btn btn-success btn-xs glyphicon glyphicon-ok" href="#" title="Download" style="width: 150px;">Download File</a>
+                            <a data-placement="top" class="btn btn-danger btn-xs glyphicon glyphicon-trash" href="#" title="Delete" style="width: 150px;">Delete File</a>
+                        </div>
+                        <div class="col-md-12">file added on: {{file.dateOfCreation}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          
 
+           
+    
+    </div>
 </div>
-

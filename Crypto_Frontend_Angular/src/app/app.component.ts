@@ -10,17 +10,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AppComponent /*implements OnInit*/{
   title = 'Crypto';
-  test:File={
-    uuid:"dsqsdqsq",
-    fileName:"test",
-    dateOfCreation:"sdsd"
-  }
-  test2:File={
-    uuid:"dsqsdqsq",
-    fileName:"test2",
-    dateOfCreation:"sdsd"
-  }
-  public files: File[] =[this.test,this.test2]  ;
+ 
+  public files: File[] =[]  ;
   constructor(private fileService: FileService){}
   
   public getFiles():void{

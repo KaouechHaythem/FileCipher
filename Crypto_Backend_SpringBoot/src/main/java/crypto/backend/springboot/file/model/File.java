@@ -10,6 +10,7 @@ import java.util.UUID;
  * the file model in the database
  */
 public class File {
+    private String userName;
     @Id
     @SequenceGenerator(name = "files_sequence",
             sequenceName = "files_sequence",
