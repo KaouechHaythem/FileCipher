@@ -15,11 +15,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * A controller class responsible for uploading the files
@@ -141,18 +141,29 @@ public class FileController {
      * @throws XmlParserException
      * @throws InternalException
      */
-    @DeleteMapping("{uuid}")
+    @DeleteMapping("delete/{uuid}")
     public void removeFile(@PathVariable("uuid") String uuid) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         fileService.removeFile(uuid.toString());
     }
 
-    @GetMapping(path = "getall")
+    /**
+     * return all th files in the database
+     *
+     * @return
+     */
+    @GetMapping(path = "findall")
     public List<File> getAll() {
         return fileCRUDService.getFiles();
     }
 
-    @GetMapping("{uuid}")
-    public Optional<File> getOne(@PathVariable("uuid") String uuid) {
+    /**
+     * return one file by its id
+     *
+     * @param uuid
+     * @return
+     */
+    @GetMapping("findone/{uuid}")
+    public File getOne(@PathVariable("uuid") String uuid) throws UserPrincipalNotFoundException {
         return fileCRUDService.getFile(uuid);
     }
 }

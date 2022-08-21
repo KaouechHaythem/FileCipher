@@ -3,9 +3,11 @@ package crypto.backend.springboot.minIO;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
+/**
+ * this component is used to initialize a MinioClient
+ */
 public class MinioInitializer {
 
 
@@ -21,6 +23,10 @@ public class MinioInitializer {
         this.minioPassword = minioPassword;
     }
 
+    /**
+     * initialize MinioClient
+     * @return
+     */
     public static MinioClient getMinioClient() {
         MinioClient minioClient =
                 MinioClient.builder()

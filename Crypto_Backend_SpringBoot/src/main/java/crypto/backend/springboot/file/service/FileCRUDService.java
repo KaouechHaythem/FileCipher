@@ -5,9 +5,9 @@ import crypto.backend.springboot.file.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -26,9 +26,9 @@ public class FileCRUDService {
     public List<File> getFiles() {
         return fileRepository.findAll();
     }
-    public Optional<File> getFile(String uuid){
+    public File getFile(String uuid) throws UserPrincipalNotFoundException {
         UUID id = UUID.fromString(uuid);
-        return fileRepository.findById(id);
+        return fileRepository.findById(id).orElseThrow(()->new UserPrincipalNotFoundException("file not found"));
     }
     /**
      * add a file to database
