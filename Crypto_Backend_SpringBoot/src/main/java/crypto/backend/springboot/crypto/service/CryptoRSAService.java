@@ -20,6 +20,22 @@ public class CryptoRSAService {
     private PublicKey publicKey;
     private PrivateKey privateKey;
 
+    public PublicKey getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(PublicKey publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(PrivateKey privateKey) {
+        this.privateKey = privateKey;
+    }
+
     /**
      * used to initialize a CryptoRSAService instance by creating the keys and initializing the key size
      *

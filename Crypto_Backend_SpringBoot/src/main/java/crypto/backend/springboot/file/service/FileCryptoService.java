@@ -1,10 +1,13 @@
 package crypto.backend.springboot.file.service;
 
 
+import crypto.backend.springboot.client.service.ClientService;
 import crypto.backend.springboot.crypto.service.CryptoRSAService;
 import crypto.backend.springboot.file.repository.FileRepository;
+import io.minio.errors.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +15,18 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+
 
 @Service
 /**
@@ -28,9 +36,20 @@ import java.security.NoSuchAlgorithmException;
  * RSA protocol to encrypt the secret key
  */
 public class FileCryptoService {
+    @Value("${secret.key}")
+    String strsecretKey;
+    KeyGenerator kgen = KeyGenerator.getInstance("AES");
+
+
     private final FileRepository fileRepository;
     private final CryptoRSAService crsa;
-
+    private final IvParameterSpec ivspec = new IvParameterSpec(new byte[128 / 8]);
+    HttpServletResponse res;
+    public IvParameterSpec getIvspec() {
+        return ivspec;
+    }
+    @Autowired
+    ClientService clientService;
     @Autowired
     public FileCryptoService(FileRepository fileRepository, CryptoRSAService crsa) throws NoSuchAlgorithmException {
         this.fileRepository = fileRepository;
@@ -38,6 +57,7 @@ public class FileCryptoService {
 
         this.crsa.init(1048);
     }
+
 
     public void init(int keySize) throws NoSuchAlgorithmException {
 
@@ -259,5 +279,116 @@ public class FileCryptoService {
         encryptedSkey = crsa.crypterByte(skey.getEncoded());
         return outputFile;
     }
+
+    public MultipartFile cryptUpload(MultipartFile inputMultiFile, String clientName) throws NoSuchAlgorithmException, IOException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+
+        String strprivateKey = clientService.findOne(clientName).getPrivateKey();
+        init(1048);
+        Cipher c = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+
+     //   c.init(Cipher.DECRYPT_MODE, transformPrivateKey(strprivateKey));
+        byte[] decodedSecretKey = Base64.getDecoder().decode(strsecretKey);
+       // byte[] decryptedSecretKey = decodedSecretKey;
+
+       SecretKey secretKey = new SecretKeySpec(decodedSecretKey, 0, decodedSecretKey.length, "AES");
+        String algo = "AES/CBC/PKCS5Padding";
+        Cipher cipher = Cipher.getInstance(algo);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivspec);
+
+
+        File encrypted = new File("local" + inputMultiFile.getOriginalFilename());
+        FileInputStream inputStream = (FileInputStream) inputMultiFile.getInputStream();
+
+
+        FileOutputStream outputStream = new FileOutputStream(encrypted);
+        byte[] buffer = new byte[64];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byte[] output = cipher.update(buffer, 0, bytesRead);
+            if (output != null) {
+                outputStream.write(output);
+            }
+        }
+
+        byte[] outputBytes = cipher.doFinal();
+        if (outputBytes != null) {
+            outputStream.write(outputBytes);
+        }
+        inputStream.close();
+        outputStream.close();
+        FileInputStream input = new FileInputStream(encrypted);
+        MultipartFile outputFile = new MockMultipartFile(encrypted.getName(), inputMultiFile.getOriginalFilename(), "text/plain", IOUtils.toByteArray(input));
+
+        input.close();
+        encrypted.delete();
+
+
+        return outputFile;
+    }
+
+
+private byte[] contentOf(String fileName) throws URISyntaxException, IOException {
+  return  Files.readAllBytes(Paths.get(fileName));
+}
+
+    public String generateSecretKey(PublicKey publicKey) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+        KeyGenerator kgen = KeyGenerator.getInstance("AES");
+
+        SecretKey skey = kgen.generateKey();
+        Cipher c = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        c.init(Cipher.ENCRYPT_MODE, publicKey);
+        byte[] encryptedKey = c.doFinal(skey.getEncoded());
+
+
+        return Base64.getEncoder().encodeToString(encryptedKey);
+    }
+
+
+
+    public PrivateKey transformPrivateKey(String strPrivateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        PKCS8EncodedKeySpec priavteKeySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(strPrivateKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePrivate(priavteKeySpec);
+
+    }
+
+    public PublicKey transformPUblicKey(String strPublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(strPublicKey));
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePublic(publicKeySpec);
+
+    }
+    public void decryptStream(File inputFile,String fileName) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+
+        System.out.println("secret key " + strsecretKey);
+
+
+        byte[] decodedSecretKey = Base64.getDecoder().decode(strsecretKey);
+
+
+        SecretKey secretKey = new SecretKeySpec(decodedSecretKey, 0, decodedSecretKey.length, "AES");
+        String algo = "AES/CBC/PKCS5Padding";
+        Cipher cipher = Cipher.getInstance(algo);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, ivspec);
+        FileInputStream inputStream = new FileInputStream(inputFile);
+        FileOutputStream outputStream = new FileOutputStream(fileName);
+        byte[] buffer = new byte[64];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            byte[] output = cipher.update(buffer, 0, bytesRead);
+            if (output != null) {
+                outputStream.write(output);
+            }
+        }
+        byte[] outputBytes = cipher.doFinal();
+        if (outputBytes != null) {
+            outputStream.write(outputBytes);
+        }
+        inputStream.close();
+
+        outputStream.close();
+    }
+
 
 }

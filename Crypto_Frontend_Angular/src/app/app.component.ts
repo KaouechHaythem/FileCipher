@@ -1,30 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FileService } from './file.service';
-import { File } from './file';
-import { HttpErrorResponse } from '@angular/common/http';
+import { MyFile } from './file';
+import { DOCUMENT } from '@angular/common';
+import { NgForm } from '@angular/forms';
+
+
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent /*implements OnInit*/{
-  title = 'Crypto';
+export class AppComponent {
  
-  public files: File[] =[]  ;
-  constructor(private fileService: FileService){}
+  title = 'Crypto';
   
-  public getFiles():void{
-    this.fileService.getFiles().subscribe(
-      (response : File[])=>{
-          this.files=response;
-      }
-    );
-    
-  }
-  /*why not working
-  ngOnInit() {
-    window.console.log('FROM ngOnInit()');
-}*/ 
-
 }
+

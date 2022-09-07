@@ -8,6 +8,8 @@ import crypto.backend.springboot.file.service.FileCryptoService;
 import crypto.backend.springboot.file.service.FileService;
 import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,10 +17,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 /**
@@ -126,6 +130,17 @@ public class FileController {
         }
 
     }
+    @PostMapping(path = "userfileupload/{crypto}")
+    public void cryptoMinioDBUserUpload(@RequestParam("file") MultipartFile multipartFile, @RequestParam("clientname")String clientName, @PathVariable("crypto") boolean crypto) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
+        if (crypto) {
+            byte[] skey = new byte[128];
+
+            fileService.minIODBUserUpload(fileCryptoService.cryptUpload(multipartFile, skey),clientName,crypto);
+        } else {
+            fileService.minIODBUserUpload(multipartFile,clientName,crypto);
+        }
+
+    }
 
     /**
      * used to delete a file from minIO and From Database
@@ -156,6 +171,11 @@ public class FileController {
         return fileCRUDService.getFiles();
     }
 
+    @GetMapping(path = "findbyclient/{clientname}")
+    public List<File> getByClient(@PathVariable("clientname") String clientName) {
+        return fileCRUDService.getFileByClient(clientName);
+    }
+
     /**
      * return one file by its id
      *
@@ -166,4 +186,46 @@ public class FileController {
     public File getOne(@PathVariable("uuid") String uuid) throws UserPrincipalNotFoundException {
         return fileCRUDService.getFile(uuid);
     }
+
+    /**
+     * Download a file from minio toa chosen folder
+     * @param fileName
+     * @throws ServerException
+     * @throws InsufficientDataException
+     * @throws ErrorResponseException
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws InvalidResponseException
+     * @throws XmlParserException
+     * @throws InternalException
+     * @return
+     */
+    @GetMapping("download/{fileid}/{filename}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable("filename")String fileName ,@PathVariable("fileid") String fileid) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException, URISyntaxException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+       return fileService.downloadFile(fileid,fileName);
+    }
+    @PostMapping("finalupload/{clientname}/{crypto}")
+    public void uploadFileFinal(@RequestParam("file")MultipartFile multipartFile,
+                                  @PathVariable("clientname")String clientName,
+                                @PathVariable("crypto")boolean crypto) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+
+    if (crypto){
+        fileService.minIODBUserUpload(fileCryptoService.cryptUpload(multipartFile,clientName),clientName,crypto);
+    }
+    else{
+        fileService.minIODBUserUpload(multipartFile,clientName,crypto);
+    }
+    }
+    @DeleteMapping("clear/{filename}")
+    public void clearDownloadFolder(@PathVariable("filename") String filename){
+        fileService.clearDownloadFolder(filename);
+    }
+   /* @GetMapping("finaldownload")
+    public void downloadFileFinal(@RequestParam("file")MultipartFile multipartFile,
+                                    @RequestParam("privatekey")String strPrivateKey
+                                  ) throws InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidKeyException, URISyntaxException {
+         fileCryptoService.downloadFile(multipartFile,strPrivateKey);
+
+    }*/
 }
