@@ -1,0 +1,140 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+<app-header></app-header>
+<div class="container" id="main-container-admin">
+   <h3 >Admin Dashboard</h3>
+     <div class="row align-items-center">
+          <div class="col-md-6">
+              <div class="mb-3">
+                  <h5 class="card-title">List Of Users : </h5>
+              </div>
+         </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
+                
+                <div>
+                    <a style="background-color:rgb(224, 159, 16) ;" data-toggle="modal" data-target="#addClientModal" class="btn btn-primary"><i class="bx bx-plus me-1"></i> Add New</a>
+                </div>
+                
+            </div>
+             </div>
+               </div>
+   
+               <div class="row">
+               
+                <div class="col-xl-3 col-sm-6" *ngFor="let client of clients" style="margin-bottom: 25px;">
+                  
+                   <div class="card"style="height: 250px;">
+                
+                      <div class="card-body">
+                      
+                          <div class="d-flex align-items-center">
+                               <div><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="avatar-md rounded-circle img-thumbnail" style="height: 150px;"/></div>
+                               <div class="flex-1 ms-3">
+                                   <h5 class="font-size-16 mb-1"><a  class="text-dark">{{client?.clientName}}</a></h5>
+                            
+                                </div>
+                            </div>
+                    
+                    
+                          <div class="d-flex gap-2 pt-4">
+                               <button type="button" class="btn btn-soft-primary btn-sm w-50" (click)="deleteModel(client)" data-toggle="modal" data-target="#deleteClientModel"><i class="bx bx-user me-1"></i> Delete</button>
+                                <button style="background-color: rgb(224, 159, 16);" type="button" class="btn btn-primary btn-sm w-50" data-toggle="modal" (click)="saveCoord(client)" data-target="#sendFileModal" ><i class="bx bx-message-square-dots me-1"></i> Send File</button>
+                            </div>
+                      </div>
+                    </div>
+                </div>
+              
+            </div>
+
+
+
+
+
+         <div class="modal fade" id="sendFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Upload File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+         
+              <div class="modal-body">
+                <form #sendFileForm="ngForm" (ngSubmit)="onAddFileClient(sendFileForm,addClient.clientName)">
+                
+                
+                  <input type="file" name="inputFile" (change)="createFile($event)" ngModel required>
+                 <h5 >Do you want to encrypt the file</h5>
+                 <label>Yes</label>
+                 <input type="radio" name="cryptoChoice" id="yesChoice" value="true" ngModel checked (change)="radioChangeHandler($event)" required>
+                <label>No</label>
+                <input type="radio" name="cryptoChoice" id="noChoice" value="false" ngModel (change)="radioChangeHandler($event)" required>
+            
+               <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelSendButton">Cancel</button>
+                <button [disabled]="sendFileForm.invalid" type="submit" class="btn btn-primary">Send</button>
+               </div>
+              </form>
+            </div>
+          </div>
+        </div>
+         </div>
+
+
+
+
+   <!-- deleteModal -->
+         <div class="modal fade" id="deleteClientModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this Client</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-footer">
+          <button id="noClientButton" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary" (click)="onDeleteClient(deleteClient.clientName)" style="background-color:#dc3545 ;">Yes</button>
+        </div>
+      </div>
+    </div>
+         </div>
+
+
+
+
+
+<!-- add Modal -->
+         <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+     
+        <div class="modal-body">
+          <form #addClientForm="ngForm" (ngSubmit)="onAddClient(addClientForm)">
+            
+           
+            <label>Enter User Name</label>
+            <input type="text" name="clientname" id="clientname" [(ngModel)]="clientname" ngModel required>
+            
+            
+            
+           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="clientCancelButton">Cancel</button>
+            <button [disabled]="addClientForm.invalid" type="submit" class="btn btn-primary">Add</button>
+           </div>
+          </form>
+        </div>
+      </div>
+    </div>
+         </div>
+ </div>

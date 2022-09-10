@@ -1,0 +1,27 @@
+.header{
+    height: 156px;
+    background-color: #3a3a3a;
+    color: rgb(250, 239, 221);
+    display: grid;
+  gap: 50px;
+}
+.logo{
+   
+        grid-column-start: 1;
+        grid-column-end: 1;
+        padding-top: 50px;
+        padding-left: 100px;
+        height: 50px;
+}
+.title{
+    grid-column-start: 2;
+        grid-column-end: 3;
+        padding-top: 50px;
+  
+}
+.description{
+        grid-column-start: 4;
+        grid-column-end: 5;
+        padding-top: 60px;
+        padding-left: 50px;
+}

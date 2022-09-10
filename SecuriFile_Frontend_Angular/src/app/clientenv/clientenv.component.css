@@ -1,0 +1,72 @@
+@import '~bootstrap/dist/css/bootstrap.min.css';
+body{
+    background:#eee;
+    }
+    .panel-order .row {
+        border-bottom: 1px solid #ccc;
+    }
+    .panel-order .row:last-child {
+        border: 0px;
+    }
+    .panel-order .row .col-md-1  {
+        text-align: center;
+        padding-top: 15px;
+    }
+    .panel-order .row .col-md-1 img {
+        width: 50px;
+        max-height: 50px;
+    }
+    .panel-order .row .row {
+        border-bottom: 0;
+    }
+    .panel-order .row .col-md-11 {
+        border-left: 1px solid #ccc;
+    }
+    .panel-order .row .row .col-md-12 {
+        padding-top: 7px;
+        padding-bottom: 7px; 
+    }
+    .panel-order .row .row .col-md-12:last-child {
+        font-size: 11px; 
+        color: #555;  
+        background: #efefef;
+    }
+    .panel-order .btn-group {
+        margin: 0px;
+        padding: 0px;
+    }
+    .panel-order .panel-body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    .panel-order .panel-deading {
+        margin-bottom: 0;
+    }   
+    .container{
+        margin-top: 20px;
+        margin-bottom: 10px;
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+       display: grid ;
+       vertical-align: middle;
+       height: 55px;
+       padding-top: 5px;
+    
+    }
+    .file_name{
+        grid-column-start: 1;
+        grid-column-end: 1;
+    }
+    
+    .download{
+        grid-column-start: 4;
+        grid-column-end: 4;
+    }
+    .delete{
+        grid-column-start: 5;
+        grid-column-end: 5;
+    }
+    .file_date{
+        grid-column-start: 2;
+        grid-column-end: 2;
+    }
+    

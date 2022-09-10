@@ -1,0 +1,93 @@
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+<app-header></app-header>
+
+
+<div style="margin-top: 25px;" id="main-container">
+    <div class="panel panel-default panel-order">
+        <div class="panel-heading" style="margin-left:50px ;">
+            <strong>Welcome User : {{userName}} </strong>
+             <!-- addModal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFileModal" style="margin-left: 900px;  background-color: rgb(224, 159, 16) ;">
+  Upload File
+</button>
+        </div>
+<div *ngFor="let file of files">
+        <div class="panel-body">
+            <div class="row">
+                
+                <div class="col-md-11">
+                    <div class="container">
+                        <div class="col-md-12">
+                            
+                            <span><strong>file name:  </strong></span> <span class="label label-info">{{file?.fileName}}</span>
+                            
+                            <a  data-placement="top"  (click)="onFinalDownload(file)" title="Download" style="margin-left: 100px; cursor: pointer;"><img height="40px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Download-Icon.png/800px-Download-Icon.png "></a>
+                            <a  data-placement="top"   (click)="deleteModel(file)" title="Delete" style="margin-left: 40px; cursor: pointer;"><img height="40px" src="https://www.iconsdb.com/icons/preview/orange/trash-6-xxl.png"></a>
+                            <span class="col-md-12" style="margin-left: 500px;">file added on: {{file?.dateOfCreation}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+          
+
+           
+    
+    </div>
+    <!-- Button trigger modal -->
+
+  
+  <!-- deleteModal -->
+  <div class="modal fade" id="deleteFileModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete this file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-footer">
+          <button id="noButton" type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-primary" (click)="onDelete(deleteFile.id)" style="background-color:#dc3545 ;">Yes</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+ 
+
+<!-- Modal -->
+<div class="modal fade" id="addFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Upload File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+   
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddFile(addForm)">
+          
+          
+          <input type="file" name="inputFile" (change)="createFile($event)" ngModel required>
+          <h5 >Do you want to encrypt the file</h5>
+          <label>Yes</label>
+          <input type="radio" name="cryptoChoice" id="yesChoice" value="true" ngModel checked (change)="radioChangeHandler($event)" required>
+          <label>No</label>
+          <input type="radio" name="cryptoChoice" id="noChoice" value="false" ngModel (change)="radioChangeHandler($event)" required>
+      
+         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id="cancelButton">Cancel</button>
+          <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Upload</button>
+         </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
