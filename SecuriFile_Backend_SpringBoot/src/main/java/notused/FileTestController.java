@@ -1,6 +1,5 @@
-package securifile.backend.springboot.crypto.controller;
+package notused;
 
-import securifile.backend.springboot.file.service.FileCryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,19 +20,19 @@ import java.security.NoSuchAlgorithmException;
 @RequestMapping(path = "filecryptotest")
 
 public class FileTestController {
-    public final FileCryptoService fileCryptoService;
+    public final CryptoAESRSA cryptoAESRSA;
 
     @Autowired
-    public FileTestController(FileCryptoService fileCryptoService) {
-        this.fileCryptoService = fileCryptoService;
+    public FileTestController(CryptoAESRSA cryptoAESRSA) {
+        this.cryptoAESRSA = cryptoAESRSA;
     }
 
     @GetMapping
     public String crypter() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, IOException, BadPaddingException, InvalidKeyException {
-        fileCryptoService.fullEncryptionDecription("inputFile.txt", "outputFile.txt", "encryptedFile.txt");
-        fileCryptoService.fullEncryptionDecription("inputFile.png", "outputFile.png", "encryptedFile.png");
-        fileCryptoService.fullEncryptionDecription("inputFile.mp4", "outputFile.mp4", "encryptedFile.mp4");
-        fileCryptoService.fullEncryptionDecription("inputFile.mp3", "outputFile.mp3", "encryptedFile.mp3");
+        cryptoAESRSA.fullEncryptionDecription("inputFile.txt", "outputFile.txt", "encryptedFile.txt");
+        cryptoAESRSA.fullEncryptionDecription("inputFile.png", "outputFile.png", "encryptedFile.png");
+        cryptoAESRSA.fullEncryptionDecription("inputFile.mp4", "outputFile.mp4", "encryptedFile.mp4");
+        cryptoAESRSA.fullEncryptionDecription("inputFile.mp3", "outputFile.mp3", "encryptedFile.mp3");
         return "success";
     }
 }

@@ -1,6 +1,4 @@
-package securifile.backend.springboot.crypto.service;
-
-import org.springframework.stereotype.Component;
+package notused;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -13,8 +11,8 @@ import java.util.Base64;
 /**
  * used to encrypt/decrypt files using rsa algorithm
  */
-@Component
-public class CryptoRSAService {
+
+public class CryptoRSA {
     private KeyPair Key;
     private int keySize;
     private PublicKey publicKey;
@@ -135,6 +133,6 @@ public class CryptoRSAService {
         return decryptedMessage;
     }
 
-    public CryptoRSAService() {
+    public CryptoRSA() {
     }
 }

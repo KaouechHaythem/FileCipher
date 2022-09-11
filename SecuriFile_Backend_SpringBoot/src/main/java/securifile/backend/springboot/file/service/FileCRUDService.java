@@ -1,9 +1,9 @@
 package securifile.backend.springboot.file.service;
 
-import securifile.backend.springboot.file.model.File;
-import securifile.backend.springboot.file.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import securifile.backend.springboot.file.model.File;
+import securifile.backend.springboot.file.repository.FileRepository;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.LocalDate;
@@ -21,15 +21,37 @@ public class FileCRUDService {
         this.fileRepository = fileRepository;
     }
 
-
+    /**
+     * return all files
+     *
+     * @return
+     */
     public List<File> getFiles() {
         return fileRepository.findAll();
     }
-    public List<File> getFileByClient(String clientName){return fileRepository.findByClientName(clientName);}
+
+    /**
+     * return all files belonging to a cilent
+     *
+     * @param clientName
+     * @return
+     */
+    public List<File> getFileByClient(String clientName) {
+        return fileRepository.findByClientName(clientName);
+    }
+
+    /**
+     * return one file by its uuid
+     *
+     * @param uuid
+     * @return
+     * @throws UserPrincipalNotFoundException
+     */
     public File getFile(String uuid) throws UserPrincipalNotFoundException {
 
         return fileRepository.findById(uuid).orElseThrow(() -> new UserPrincipalNotFoundException("file not found"));
     }
+
     /**
      * add a file to database
      * uuid is returned to be used in FileUploadService.addFile
@@ -37,6 +59,7 @@ public class FileCRUDService {
      * @param fileName
      * @return
      */
+    //this method is not actually used in the app it s only used by CryptoAESRSA
     public String addFile(String fileName) {
         LocalDate dateOfCreation = LocalDate.now();
         File file = new File(fileName, dateOfCreation);
@@ -44,9 +67,16 @@ public class FileCRUDService {
         return file.getId();
     }
 
-    public String addFile(String fileName,String userName,boolean encrypted) {
+    /**
+     * add a file to database
+     * uuid is returned to be used in FileUploadService.addFile
+     *
+     * @param fileName
+     * @return
+     */
+    public String addFile(String fileName, String userName, boolean encrypted) {
         LocalDate dateOfCreation = LocalDate.now();
-        File file = new File(fileName, dateOfCreation,userName,encrypted);
+        File file = new File(fileName, dateOfCreation, userName, encrypted);
         fileRepository.save(file);
         return file.getId();
     }

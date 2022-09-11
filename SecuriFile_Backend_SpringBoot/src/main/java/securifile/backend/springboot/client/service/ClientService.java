@@ -1,9 +1,9 @@
 package securifile.backend.springboot.client.service;
 
-import securifile.backend.springboot.client.model.Client;
-import securifile.backend.springboot.client.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import securifile.backend.springboot.client.model.Client;
+import securifile.backend.springboot.client.repository.ClientRepository;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -27,18 +27,46 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
+    /**
+     * return all Clients(only their names)
+     *
+     * @return
+     */
     public List<Client> findAll() {
         return clientRepository.findNameClient();
     }
 
+    /**
+     * return one client
+     *
+     * @param clientName
+     * @return
+     * @throws UserPrincipalNotFoundException
+     */
     public Client findOne(String clientName) throws UserPrincipalNotFoundException {
         return clientRepository.findById(clientName).orElseThrow(() -> new UserPrincipalNotFoundException("Client not found"));
     }
 
+    /**
+     * delete a client
+     *
+     * @param clientName
+     */
     public void deleteClient(String clientName) {
         clientRepository.deleteById(clientName);
     }
 
+    /**
+     * add a client
+     *
+     * @param clientName
+     * @throws NoSuchAlgorithmException
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws BadPaddingException
+     * @throws InvalidKeySpecException
+     * @throws InvalidKeyException
+     */
     public void addClient(String clientName) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         if (!(clientRepository.existsById(clientName))) {
 
@@ -52,6 +80,12 @@ public class ClientService {
 
     }
 
+    /**
+     * generate public key and private key
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     */
     public KeyPair generateKeyPair() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
         keyPairGen.initialize(1048);

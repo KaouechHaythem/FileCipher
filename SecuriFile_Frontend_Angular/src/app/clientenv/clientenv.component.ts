@@ -22,15 +22,18 @@ export class ClientenvComponent implements OnInit {
       clientName:'init',
       encrypted:false
     }
-   
+   //store all the files belonging to current user
     public files: MyFile[] =[]  ;
+   //store the file to be deleted when calling function deleteModel
     public deleteFile: MyFile=this.fileInit;
+   // store the file to add when calling function createFile
     public addFile: File | undefined;
+   // store the value of the radio (encrypted or nor when adding a file)
     radioValue: string="true";
       
     
     constructor(private fileService: FileService,@Inject(DOCUMENT) private document: Document){}
-    
+    // return all the files belonging to current user
     public getFiles():void{
       this.fileService.getByClient(this.userName).subscribe(
         (response : MyFile[])=>{
@@ -39,11 +42,12 @@ export class ClientenvComponent implements OnInit {
       );
       
     }
-   
+   // call getFiles all files  when  this webpage is loaded
     ngOnInit() {
       this.getFiles();
       
   } 
+  // show the delete model when delete button is clicked
   public deleteModel(file:MyFile):void{
     const container =this.document.getElementById('main-container');
     const button = document.createElement("button");
@@ -57,7 +61,7 @@ export class ClientenvComponent implements OnInit {
     button.click(); 
      
   }
-  
+  // this function deletes a file
   public onDelete(fileId:string):void{
     this.document.getElementById('noButton')?.click();
     this.fileService.deleteFile(fileId).subscribe(
@@ -68,10 +72,12 @@ export class ClientenvComponent implements OnInit {
       }
     )
   }
+  // when the file is chosen in the input form it will be stored in addFile
   public createFile(event:any){
     this.addFile = event.target.files[0];
      
   }
+  //add a file to the current user
   public onAddFile(addForm:NgForm):void{
     this.document.getElementById('cancelButton')?.click();
   
@@ -93,10 +99,11 @@ export class ClientenvComponent implements OnInit {
       
   }
   } 
-  
+  //detecting when the value of the radio (encrypted or not) changes and stores its value
   public radioChangeHandler(event:any) :void{
     this.radioValue=event.target.value;
   }
+  /*this was meant to download the file locally to the server (not useful anymore)
   public onDownload(file:MyFile):void{
     
     this.fileService.downloadFile(file.id+file.fileName).subscribe(
@@ -107,9 +114,10 @@ export class ClientenvComponent implements OnInit {
        
       }
     )
-  }
+  }*/
+  // download current file 
   public onFinalDownload(file:MyFile):void{
-    extention   : file.fileName.substring(file.fileName.lastIndexOf('.')+1);
+    
     
     this.fileService.finaldownloadFile(file.id,file.fileName).subscribe(
       (response)=>{

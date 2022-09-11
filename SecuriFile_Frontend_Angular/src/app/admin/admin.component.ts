@@ -12,31 +12,28 @@ import { FileService } from '../file.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  public fileInit: MyFile =  {
-    id :'init',
-    fileName:'init',
-    dateOfCreation:'init',
-    clientName:'init',
-    encrypted:false
-  }
+//inizialize a Client instance
   public clientinit:Client={
     clientName:"init",
    
   }
+ // store the client to be deleted 
   public deleteClient:Client = this.clientinit;
-  public deleteFile: MyFile=this.fileInit;
+ // store the file to be sent
     public addFile: File | undefined;
+ // store the value of the radio (encrypted or not ) during file sending   
     radioValue: string="true";
-  files: MyFile[]=[];
-  prvKey: string="";
-  sKey: string="";
+  
+ // store the name of the client add
   clientname: string="";
+ // store the value of the the client to be added
   addClient: Client=this.clientinit;
-   
+  //store the list of all the clients
+  clients : Client[]=[];
 
 
   constructor(private clientService: ClientService,private fileService: FileService,@Inject(DOCUMENT) private document: Document) { }
-  clients : Client[]=[];
+  //show all the clients when this page loads
   ngOnInit(): void {
       this.clientService.getClients().subscribe(
         (response:Client[])=>{
@@ -44,6 +41,7 @@ export class AdminComponent implements OnInit {
         }
       );
   }
+  // store all the clients in table clients
  public getClients():void{
     this.clientService.getClients().subscribe(
       (response:Client[])=>{
@@ -51,13 +49,16 @@ export class AdminComponent implements OnInit {
       }
     );
   }
+  //save the client to be added
 public saveCoord(client:Client){
   this.addClient=client;
 }
+// when the file is chosen in the input form it will be stored in addFile
     public createFile(event:any){
     this.addFile = event.target.files[0];
      
   }
+// send a file to chosen client
   public onAddFileClient(addForm:NgForm,clientName:string):void{
     this.document.getElementById('cancelSendButton')?.click();
   
@@ -68,47 +69,27 @@ public saveCoord(client:Client){
       const formData = new FormData();
   
       formData.append("file", this.addFile);
-      console.log(this.clientname);
+      
       
   
       this.fileService.addFileByUser(formData,clientName, this.radioValue).subscribe(
-        () => {
-          this.getFiles();
-        }
           );
        
       
   }
   } 
-  public getFiles():void{
-    this.fileService.getFiles().subscribe(
-      (response : MyFile[])=>{
-          this.files=response;
-      }
-    );
-    
-  }
-  
+ // store the value of the radio (encrypted or not when it changes)
   public radioChangeHandler(event:any) :void{
     this.radioValue=event.target.value;
   }
-  public onDownload(file:MyFile):void{
-    
-    this.fileService.downloadFile(file.id+file.fileName).subscribe(
-      (response:any)=>{
-        console.log(response);
-        this.getFiles();
-        alert(file.fileName + " Downloaded successfully")
-       
-      }
-    )
-  }
+  //save the client to be deleted
   public deleteModel(client:Client):void{
     
     this.deleteClient =client;
   
     
   }
+  //delete chosen client
   public onDeleteClient(clientName:string):void{
     this.document.getElementById("noClientButton")?.click();
     console.log("clientName" + clientName);
@@ -119,6 +100,7 @@ public saveCoord(client:Client){
       );
       
   }
+  // add a client
   public onAddClient(form:NgForm):void{
     this.document.getElementById("clientCancelButton")?.click();
     this.clientService.addClient(this.clientname).subscribe(
