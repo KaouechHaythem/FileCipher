@@ -38,9 +38,9 @@ public class ClientController {
      * @throws InvalidKeySpecException
      * @throws InvalidKeyException
      */
-    @GetMapping(path = "addclient/{clientname}")
-    public void addClient(@PathVariable("clientname") String clientName) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
-        clientService.addClient(clientName);
+    @GetMapping(path = "addclient/{clientname}/{password}")
+    public void addClient(@PathVariable("clientname") String clientName,@PathVariable("password") String password) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+        clientService.addClient(clientName,password);
     }
 
     /**

@@ -26,6 +26,8 @@ export class AdminComponent implements OnInit {
   
  // store the name of the client add
   clientname: string="";
+  // store the password of the client add
+  password: string="";
  // store the value of the the client to be added
   addClient: Client=this.clientinit;
   //store the list of all the clients
@@ -103,7 +105,7 @@ public saveCoord(client:Client){
   // add a client
   public onAddClient(form:NgForm):void{
     this.document.getElementById("clientCancelButton")?.click();
-    this.clientService.addClient(this.clientname).subscribe(
+    this.clientService.addClient(this.clientname,this.password).subscribe(
       (Response: void)=>{
         this.getClients();
       }

@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { MyFile } from '../file';
 import { FileService } from '../file.service';
 import * as FileSaver from 'file-saver';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-clientenv',
@@ -13,7 +14,8 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./clientenv.component.css']
 })
 export class ClientenvComponent implements OnInit {
-    userName:string = "Haythem"
+ 
+    userName: string='';
     title = 'Crypto';
     public fileInit: MyFile =  {
       id :'init',
@@ -32,7 +34,7 @@ export class ClientenvComponent implements OnInit {
     radioValue: string="true";
       
     
-    constructor(private fileService: FileService,@Inject(DOCUMENT) private document: Document){}
+    constructor(private fileService: FileService,@Inject(DOCUMENT) private document: Document,private keyCloakService:KeycloakService){}
     // return all the files belonging to current user
     public getFiles():void{
       this.fileService.getByClient(this.userName).subscribe(
@@ -44,7 +46,10 @@ export class ClientenvComponent implements OnInit {
     }
    // call getFiles all files  when  this webpage is loaded
     ngOnInit() {
+      
+      this.userName=this.keyCloakService.getUsername();
       this.getFiles();
+      console.log(this.userName);
       
   } 
   // show the delete model when delete button is clicked

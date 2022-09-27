@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import securifile.backend.springboot.client.model.Client;
 import securifile.backend.springboot.client.repository.ClientRepository;
+import securifile.backend.springboot.keycloak.KeycloakService;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -21,7 +22,8 @@ import java.util.List;
 public class ClientService {
     @Autowired
     public final ClientRepository clientRepository;
-
+    @Autowired
+    private KeycloakService keycloakService;
 
     public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
@@ -53,6 +55,8 @@ public class ClientService {
      * @param clientName
      */
     public void deleteClient(String clientName) {
+
+        keycloakService.deleteUser(clientName);
         clientRepository.deleteById(clientName);
     }
 
@@ -67,15 +71,18 @@ public class ClientService {
      * @throws InvalidKeySpecException
      * @throws InvalidKeyException
      */
-    public void addClient(String clientName) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
+    public void addClient(String clientName,String clientPass) throws NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         if (!(clientRepository.existsById(clientName))) {
 
 
             KeyPair keyPair = generateKeyPair();
             String privateKey = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
             String publicKey = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
-            Client newClient = new Client(clientName, publicKey, privateKey);
+            Client newClient = new Client(clientName, clientPass, publicKey, privateKey);
+            keycloakService.addUser(newClient);
+
             clientRepository.save(newClient);
+
         }
 
     }

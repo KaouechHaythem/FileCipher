@@ -13,8 +13,8 @@ export class ClientService{
     public getClients():Observable<Client[]>{
         return this.http.get<Client[]>(`${this.apiServerUrl}/api/v1/client/findall`);
     }
-    public addClient(clientname:string):Observable<void>{
-        return this.http.get<void>(`${this.apiServerUrl}/api/v1/client/addclient/${clientname}`);
+    public addClient(clientname:string,password:string):Observable<void>{
+        return this.http.get<void>(`${this.apiServerUrl}/api/v1/client/addclient/${clientname}/${password}`);
     }
     public deleteClient(clientname:string):Observable<void>{
         return this.http.delete<void>(`${this.apiServerUrl}/api/v1/client/delete/${clientname}`);

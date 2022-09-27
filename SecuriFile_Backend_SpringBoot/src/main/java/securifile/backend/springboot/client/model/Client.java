@@ -17,6 +17,8 @@ public class Client {
 
 
     private String clientName;
+    private String passWord;
+
     @Column(length = 2048)
     private String publicKey;
     @Column(length = 2048)
@@ -61,13 +63,18 @@ public class Client {
         this.privateKey = privateKey;
     }
 
+    public Client(String clientName, String passWord, String publicKey, String privateKey) {
+        this.clientName = clientName;
+        this.passWord = passWord;
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+    }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + clientName + '\'' +
-                ", publicKey='" + publicKey + '\'' +
-                ", privateKey='" + privateKey + '\'' +
-                '}';
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 }

@@ -31,7 +31,7 @@
                           <div class="d-flex align-items-center">
                                <div><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="avatar-md rounded-circle img-thumbnail" style="width: 150px; height: 150px;"/></div>
                                <div class="flex-1 ms-3">
-                                   <h5 class="font-size-16 mb-1"><a href="http://localhost:4200/client/{{client?.clientName}}" class="text-dark">{{client?.clientName}}</a></h5>
+                                   <h5 class="font-size-16 mb-1"><a  class="text-dark">{{client?.clientName}}</a></h5>
                             
                                 </div>
                             </div>
@@ -123,9 +123,10 @@
           <form #addClientForm="ngForm" (ngSubmit)="onAddClient(addClientForm)">
             
            
-            <label>Enter User Name</label>
-            <input type="text" name="clientname" id="clientname" [(ngModel)]="clientname" ngModel required>
-            
+            <label style="width: 150px;">Enter User Name :</label>
+            <input type="text" name="clientname" id="clientname" [(ngModel)]="clientname" ngModel required><br><br>
+            <label style="width: 150px;">Enter password :</label>
+            <input type="password" name="password" id="password" [(ngModel)]="password" ngModel required>
             
             
            <div class="modal-footer">
@@ -137,4 +138,5 @@
       </div>
     </div>
          </div>
+         
  </div>

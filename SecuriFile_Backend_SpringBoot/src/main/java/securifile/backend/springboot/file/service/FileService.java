@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import securifile.backend.springboot.minIO.MinioInitializer;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -39,21 +38,19 @@ public class FileService {
 
     @Value("${minio.bucket.name}")
     private String bucketName;
-
-    private MinioInitializer minioInitializer;
+    @Autowired
+    private MinioClient minioClient;
 
     private FileCRUDService fileCRUDService;
     @Autowired
     private FileCryptoService fileCryptoService;
 
 
-    public FileService(@Autowired MinioInitializer minioInitializer, @Autowired FileCRUDService fileCRUDService) {
-        this.minioInitializer = minioInitializer;
+    public FileService(@Autowired FileCRUDService fileCRUDService) {
+
         this.fileCRUDService = fileCRUDService;
 
     }
-
-    MinioClient minioClient = MinioInitializer.getMinioClient();
 
 
     /**

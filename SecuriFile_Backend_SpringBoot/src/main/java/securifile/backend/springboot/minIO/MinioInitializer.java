@@ -2,36 +2,37 @@ package securifile.backend.springboot.minIO;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
 /**
  * this component is used to initialize a MinioClient
  */
 public class MinioInitializer {
 
-
+    @Value("${minio.endpoint}")
     private String minioEndPoint;
-
+    @Value("${minio.username}")
     private String minioUserName;
-
+    @Value("${minio.password}")
     private String minioPassword;
 
-    public MinioInitializer(@Value("${minio.endpoint}") String minioEndPoint, @Value("${minio.username}") String minioUserName, @Value("${minio.password}") String minioPassword) {
-        this.minioEndPoint = minioEndPoint;
-        this.minioUserName = minioUserName;
-        this.minioPassword = minioPassword;
+    public MinioInitializer( ) {
+
     }
 
     /**
      * initialize MinioClient
      * @return
      */
-    public static MinioClient getMinioClient() {
+    @Bean
+    public  MinioClient getMinioClient() {
         MinioClient minioClient =
                 MinioClient.builder()
-                        .endpoint("http://127.0.0.1:9000")
-                        .credentials("minioadmin", "minioadmin")
+                        .endpoint(minioEndPoint)
+                        .credentials(minioUserName, minioPassword)
                         .build();
         return minioClient;
     }
